@@ -244,4 +244,37 @@
    */
   new PureCounter();
 
+  // Dark/Light theme toggle logic
+  const themeToggleBtn = select('#theme-toggle');
+  const themeIcon = select('#theme-icon');
+  const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  function setTheme(theme) {
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeIcon.classList.remove('bi-sun-fill');
+      themeIcon.classList.add('bi-moon-fill');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      themeIcon.classList.remove('bi-moon-fill');
+      themeIcon.classList.add('bi-sun-fill');
+    }
+  }
+
+  // Initialize theme on page load
+  let savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    setTheme(savedTheme);
+  } else {
+    setTheme(userPrefersDark ? 'dark' : 'light');
+  }
+
+  // Toggle theme on button click
+  themeToggleBtn.addEventListener('click', () => {
+    let currentTheme = document.documentElement.getAttribute('data-theme');
+    let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  });
+
 })()
